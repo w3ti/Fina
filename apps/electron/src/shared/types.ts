@@ -189,6 +189,7 @@ export interface BudgetWithProgress extends Budget {
 }
 
 export interface Bill {
+  debt_agreement_id?: string | null;
   id: string;
   description: string;
   amount: number;
@@ -779,6 +780,45 @@ export interface Debt {
   status: DebtStatus;
   created_at: string;
   updated_at: string;
+  agreement_id?: string | null;
+  agreement_history_count?: number;
+}
+
+export interface DebtAgreementInput {
+  debt_id: string;
+  agreed_on: string;
+  total_amount: number;
+  down_payment: number;
+  down_payment_date: string | null;
+  installments: number;
+  first_due_date: string | null;
+  notes: string | null;
+}
+
+export interface DebtAgreementInstallment {
+  id: string;
+  agreement_id: string;
+  number: number;
+  amount_cents: number;
+  due_date: string;
+  bill_id: string | null;
+  transaction_id: string | null;
+  paid_at: string | null;
+}
+
+export interface DebtAgreement {
+  id: string;
+  debt_id: string;
+  description: string;
+  creditor: string | null;
+  agreed_on: string;
+  original_balance_cents: number;
+  total_amount_cents: number;
+  down_payment_cents: number;
+  installments_total: number;
+  notes: string | null;
+  status: 'active' | 'completed' | 'cancelled';
+  installments: DebtAgreementInstallment[];
 }
 
 export interface DebtSimulation {

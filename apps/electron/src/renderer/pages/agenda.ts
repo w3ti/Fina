@@ -242,9 +242,11 @@ function billSection(title: string, bills: BillWithCategory[], isOverdue: boolea
                 <td>
                   <div style="display:flex;gap:6px">
                     ${b.status !== 'paid' ? `<button class="btn btn-primary btn-sm" data-pay="${b.id}">Pagar</button>` : ''}
+                    ${b.debt_agreement_id ? '<span class="badge">Parcela de acordo</span>' : `
                     <button class="btn btn-ghost btn-sm" data-edit-bill="${b.id}">Editar</button>
                     <button class="btn btn-ghost btn-sm" data-dup-bill="${b.id}">Duplicar</button>
                     <button class="btn btn-danger btn-sm" data-del-bill="${b.id}">✕</button>
+                    `}
                   </div>
                 </td>
               </tr>`;
@@ -377,6 +379,16 @@ function openBillModal(b: Bill | null, onDone: () => void, draft?: AIBillDraft):
   updateCategorySummary(overlay);
 }
 
+export async function openBillPayment(billId: string, onDone: () => void): Promise<void> {
+  [accounts, expenseCategories] = await Promise.all([
+    invoke<Account[]>('accounts:list'), invoke<Category[]>('categories:list', 'expense'),
+  ]);
+  const bills = await invoke<BillWithCategory[]>('bills:list');
+  const bill = bills.find(item => item.id === billId);
+  if (!bill) { await showAlert('Esta parcela já foi paga ou não está mais disponível.'); onDone(); return; }
+  await openPayBillModal(bill, onDone);
+}
+
 async function openPayBillModal(b: BillWithCategory, onDone: () => void): Promise<void> {
   // Se a conta já tem categoria definida, ela é reaproveitada automaticamente
   // no lançamento — só pedimos para escolher quando não há uma.
@@ -387,6 +399,7 @@ async function openPayBillModal(b: BillWithCategory, onDone: () => void): Promis
 
   const today = new Date().toISOString().split('T')[0];
   const initialPayments = initialPaymentSplits(b.payments, b.account_id ?? undefined, b.amount);
+  if (!initialPayments.length) initialPayments.push({ account_id: '', amount: b.amount });
 
   const overlay = openModal({
     title: 'Confirmar pagamento',

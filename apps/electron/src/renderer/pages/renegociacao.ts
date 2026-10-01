@@ -1,16 +1,36 @@
 import { invoke } from '../api';
 import { formatCurrency, formatPercent } from '../../shared/utils';
 import { runAIAction } from '../components/aiConsent';
-import type { Debt } from '../../shared/types';
+import type { Debt, DebtAgreement } from '../../shared/types';
+import { agreementStatusLabel, openDebtAgreementDetails, openDebtAgreementForm } from '../components/debtAgreementModal';
+import { fromCents } from '../../shared/money';
+import { td } from '../i18n';
 
 export async function render(el: HTMLElement): Promise<void> {
-  const debts = (await invoke<Debt[]>('debts:list')).filter(d => d.status !== 'quitada');
+  const [allDebts, agreements] = await Promise.all([
+    invoke<Debt[]>('debts:list'), invoke<DebtAgreement[]>('debts:listAgreements'),
+  ]);
+  const debts = allDebts.filter(d => d.status !== 'quitada' && !d.agreement_id);
   const sorted = [...debts].sort((a, b) => priority(b) - priority(a));
   const total = sorted.reduce((sum, d) => sum + d.outstanding_balance, 0);
   const installments = sorted.reduce((sum, d) => sum + d.installment_amount, 0);
   const targetReduction = installments * 0.2;
 
   el.innerHTML = `
+    ${agreements.length ? `
+      <h2 style="margin-bottom:12px">Acordos registrados</h2>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+        ${agreements.map(agreement => {
+          const paid = agreement.installments.filter(item => item.paid_at != null).reduce((sum, item) => sum + item.amount_cents, 0);
+          return `<div class="card"><div class="card-body" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <div><strong>${esc(agreement.description)}</strong> · ${agreementStatusLabel(agreement.status)}
+              <div style="color:var(--text-2)">${esc(td('Total negociado: {value} · Pago: {value}', [formatCurrency(fromCents(agreement.total_amount_cents)), formatCurrency(fromCents(paid))]))}</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" data-agreement-debt="${esc(agreement.debt_id)}">Ver acordos</button>
+          </div></div>`;
+        }).join('')}
+      </div>` : ''}
+    <h2 style="margin-bottom:12px">Dívidas para negociar</h2>
     <div class="grid-3" style="margin-bottom:20px">
       <div class="stat-card">
         <div class="stat-label">Saldo negociável</div>
@@ -30,7 +50,7 @@ export async function render(el: HTMLElement): Promise<void> {
     ${sorted.length === 0 ? `
       <div class="empty">
         <i class="ti ti-circle-check"></i>
-        <div class="empty-title">Nenhuma dívida ativa</div>
+        <div class="empty-title">Nenhuma dívida aguardando acordo</div>
       </div>
     ` : `
       <div style="display:flex;flex-direction:column;gap:12px">
@@ -38,6 +58,16 @@ export async function render(el: HTMLElement): Promise<void> {
       </div>
     `}
   `;
+
+  el.querySelectorAll<HTMLButtonElement>('[data-agreement-debt]').forEach(button => {
+    button.addEventListener('click', () => { void openDebtAgreementDetails(button.dataset.agreementDebt!, () => render(el)); });
+  });
+  el.querySelectorAll<HTMLButtonElement>('.btn-register-agreement').forEach(button => {
+    button.addEventListener('click', () => {
+      const debt = sorted[Number(button.dataset.index)];
+      if (debt) openDebtAgreementForm(debt, () => render(el));
+    });
+  });
 
   el.querySelectorAll<HTMLButtonElement>('.btn-renegotiation-draft').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -93,6 +123,7 @@ function debtCard(d: Debt, index: number): string {
             Peça redução de juros, alongamento do prazo sem tarifas extras e desconto para quitação parcial. Use a parcela-alvo como limite de negociação.
           </div>
           <button type="button" class="btn btn-secondary btn-sm btn-renegotiation-draft" data-index="${index}" style="margin-top:12px"><i class="ti ti-sparkles"></i> Gerar rascunho com IA</button>
+          <button type="button" class="btn btn-primary btn-sm btn-register-agreement" data-index="${index}" style="margin-top:12px">Registrar acordo</button>
         </div>
       </div>
     </div>
@@ -104,5 +135,5 @@ function priority(d: Debt): number {
 }
 
 function esc(s: string): string {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }

@@ -8,6 +8,7 @@ import { buildExpenseAnalyticsWhere, categoryOrChildPredicate, transactionCatego
 import type { ExpenseAnalyticsFilters } from '../categoryHierarchyQueries';
 import { formatMainDate } from '../i18n';
 import { fromCents, reconcileMoneyParts, splitCents, toCents, toExactCents, type Cents } from '../../shared/money';
+import { assertAgreementTransactionEditable, reopenAgreementPayment } from '../debtAgreements';
 
 const JOIN = `
   SELECT t.*, a.name as account_name,
@@ -601,6 +602,7 @@ export function registerTransactionHandlers(): void {
   });
 
   ipcMain.handle('transactions:update', (_e, { id, ...data }: TransactionUpdateInput) => {
+    assertAgreementTransactionEditable(getDb(), id);
     if (data.type === 'transfer' && (!data.to_account_id || data.to_account_id === data.account_id)) {
       throw new Error('Selecione uma conta ou cartão de destino diferente da conta ou cartão de origem para a transferência.');
     }
@@ -651,6 +653,7 @@ export function registerTransactionHandlers(): void {
     db.transaction(() => {
       const tx = db.prepare('SELECT * FROM transactions WHERE id = ?').get(id) as Transaction | undefined;
       const payments = tx ? getTransactionPayments(id) : [];
+      reopenAgreementPayment(db, id);
       db.prepare('DELETE FROM transactions WHERE id = ?').run(id);
       if (tx?.status === 'confirmed') {
         applyBalanceEffect({ ...tx, payments }, -1);

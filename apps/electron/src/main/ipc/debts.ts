@@ -4,6 +4,8 @@ import { getDb } from '../database';
 import { projectCompoundGrowth, simulateDebtPayoff } from '../../shared/utils';
 import type { Debt, DebtSimulation, DebtVsInvestComparison } from '../../shared/types';
 import { fromCents, toExactCents } from '../../shared/money';
+import { cancelDebtAgreement, createDebtAgreement, currentDebtAgreement, listDebtAgreements } from '../debtAgreements';
+import { requireString } from '../ipcValidation';
 
 type CreatePayload = Omit<Debt, 'id' | 'created_at' | 'updated_at'>;
 
@@ -50,8 +52,14 @@ function compareDebtVsInvest(
 }
 
 export function registerDebtHandlers(): void {
+  ipcMain.handle('debts:listAgreements', (_e, debtId?: string) => listDebtAgreements(getDb(), debtId == null ? undefined : requireString(debtId)));
+  ipcMain.handle('debts:createAgreement', (_e, data: unknown) => createDebtAgreement(getDb(), data));
+  ipcMain.handle('debts:cancelAgreement', (_e, id: string) => cancelDebtAgreement(getDb(), id));
   ipcMain.handle('debts:list', () =>
-    getDb().prepare(`SELECT * FROM debts ORDER BY status, next_due_date ASC NULLS LAST`).all()
+    getDb().prepare(`SELECT d.*, a.id AS agreement_id,
+      (SELECT COUNT(*) FROM debt_agreements history WHERE history.debt_id = d.id) AS agreement_history_count FROM debts d
+      LEFT JOIN debt_agreements a ON a.debt_id = d.id AND a.status != 'cancelled'
+      ORDER BY d.status, d.next_due_date ASC NULLS LAST`).all()
   );
 
   ipcMain.handle('debts:create', (_e, data: CreatePayload) => {
@@ -72,6 +80,7 @@ export function registerDebtHandlers(): void {
   });
 
   ipcMain.handle('debts:update', (_e, { id, ...data }: Partial<CreatePayload> & { id: string }) => {
+    if (currentDebtAgreement(getDb(), id)) throw new Error('Os valores desta dívida são controlados pelo acordo e pelos pagamentos das parcelas.');
     const originalCents = toExactCents(data.original_amount ?? 0);
     const outstandingCents = toExactCents(data.outstanding_balance ?? 0);
     const installmentCents = toExactCents(data.installment_amount ?? 0);
@@ -87,9 +96,12 @@ export function registerDebtHandlers(): void {
     return getDb().prepare('SELECT * FROM debts WHERE id = ?').get(id);
   });
 
-  ipcMain.handle('debts:delete', (_e, id: string) =>
-    getDb().prepare('DELETE FROM debts WHERE id = ?').run(id)
-  );
+  ipcMain.handle('debts:delete', (_e, id: string) => {
+    if (getDb().prepare('SELECT 1 FROM debt_agreements WHERE debt_id = ?').get(id)) {
+      throw new Error('Esta dívida possui histórico de acordos e não pode ser excluída.');
+    }
+    return getDb().prepare('DELETE FROM debts WHERE id = ?').run(id);
+  });
 
   ipcMain.handle('debts:simulate', (_e, payload: {
     balance: number;
@@ -108,6 +120,7 @@ export function registerDebtHandlers(): void {
     compareDebtVsInvest(payload.balance, payload.rate, payload.min_payment, payload.extra_payment, payload.annual_invest_rate));
 
   ipcMain.handle('debts:createBill', (_e, debtId: string) => {
+    if (currentDebtAgreement(getDb(), debtId)) throw new Error('As parcelas deste acordo já estão em Contas a pagar.');
     const debt = getDb().prepare('SELECT * FROM debts WHERE id = ?').get(debtId) as Debt | undefined;
     if (!debt || !debt.next_due_date) throw new Error('Dívida não encontrada ou sem data de vencimento.');
 

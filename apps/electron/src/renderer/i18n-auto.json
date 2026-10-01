@@ -9928,5 +9928,287 @@
     "en-US": "Importing transactions…",
     "es-ES": "Importando transacciones…",
     "zh-CN": "正在导入交易…"
+  },
+  "Selecione uma dívida ativa com saldo devedor.": {
+    "pt-BR": "Selecione uma dívida ativa com saldo devedor.",
+    "en-US": "Select an active debt with an outstanding balance.",
+    "es-ES": "Seleccione una deuda activa con saldo pendiente.",
+    "zh-CN": "请选择有未还余额的有效债务。"
+  },
+  "Esta dívida já possui um acordo registrado.": {
+    "pt-BR": "Esta dívida já possui um acordo registrado.",
+    "en-US": "This debt already has a registered agreement.",
+    "es-ES": "Esta deuda ya tiene un acuerdo registrado.",
+    "zh-CN": "此债务已有登记的协议。"
+  },
+  "Acordo não encontrado.": {
+    "pt-BR": "Acordo não encontrado.",
+    "en-US": "Agreement not found.",
+    "es-ES": "Acuerdo no encontrado.",
+    "zh-CN": "未找到协议。"
+  },
+  "Estorne os pagamentos do acordo antes de cancelá-lo.": {
+    "pt-BR": "Estorne os pagamentos do acordo antes de cancelá-lo.",
+    "en-US": "Reverse the agreement payments before cancelling it.",
+    "es-ES": "Revierta los pagos del acuerdo antes de cancelarlo.",
+    "zh-CN": "请先撤销协议付款，再取消协议。"
+  },
+  "Esta parcela pertence a um acordo. Use Pagar para baixá-la ou consulte o acordo em Dívidas.": {
+    "pt-BR": "Esta parcela pertence a um acordo. Use Pagar para baixá-la ou consulte o acordo em Dívidas.",
+    "en-US": "This installment belongs to an agreement. Use Pay to settle it or view the agreement under Debts.",
+    "es-ES": "Esta cuota pertenece a un acuerdo. Use Pagar para liquidarla o consulte el acuerdo en Deudas.",
+    "zh-CN": "此分期属于协议。请选择“支付”结清，或在“债务”中查看协议。"
+  },
+  "Informe uma data de pagamento entre a data do acordo e hoje.": {
+    "pt-BR": "Informe uma data de pagamento entre a data do acordo e hoje.",
+    "en-US": "Enter a payment date between the agreement date and today.",
+    "es-ES": "Introduzca una fecha de pago entre la fecha del acuerdo y hoy.",
+    "zh-CN": "请输入协议日期至今天之间的付款日期。"
+  },
+  "O pagamento deve corresponder ao valor contratado da parcela.": {
+    "pt-BR": "O pagamento deve corresponder ao valor contratado da parcela.",
+    "en-US": "The payment must match the agreed installment amount.",
+    "es-ES": "El pago debe coincidir con el importe acordado de la cuota.",
+    "zh-CN": "付款金额必须与约定的分期金额一致。"
+  },
+  "Para corrigir este pagamento, exclua o lançamento. A parcela do acordo será reaberta automaticamente.": {
+    "pt-BR": "Para corrigir este pagamento, exclua o lançamento. A parcela do acordo será reaberta automaticamente.",
+    "en-US": "To correct this payment, delete the transaction. The agreement installment will automatically reopen.",
+    "es-ES": "Para corregir este pago, elimine el movimiento. La cuota del acuerdo volverá a estar pendiente automáticamente.",
+    "zh-CN": "要更正此付款，请删除交易。协议分期将自动恢复为待付款。"
+  },
+  "Os valores desta dívida são controlados pelo acordo e pelos pagamentos das parcelas.": {
+    "pt-BR": "Os valores desta dívida são controlados pelo acordo e pelos pagamentos das parcelas.",
+    "en-US": "This debt’s amounts are managed by the agreement and its installment payments.",
+    "es-ES": "Los importes de esta deuda se gestionan mediante el acuerdo y los pagos de las cuotas.",
+    "zh-CN": "此债务的金额由协议及其分期付款管理。"
+  },
+  "Esta dívida possui histórico de acordos e não pode ser excluída.": {
+    "pt-BR": "Esta dívida possui histórico de acordos e não pode ser excluída.",
+    "en-US": "This debt has an agreement history and cannot be deleted.",
+    "es-ES": "Esta deuda tiene un historial de acuerdos y no se puede eliminar.",
+    "zh-CN": "此债务有协议历史记录，无法删除。"
+  },
+  "As parcelas deste acordo já estão em Contas a pagar.": {
+    "pt-BR": "As parcelas deste acordo já estão em Contas a pagar.",
+    "en-US": "This agreement’s installments are already in Bills.",
+    "es-ES": "Las cuotas de este acuerdo ya están en Cuentas por pagar.",
+    "zh-CN": "此协议的分期已列入应付账款。"
+  },
+  "Não foi possível salvar o acordo.": {
+    "pt-BR": "Não foi possível salvar o acordo.",
+    "en-US": "Could not save the agreement.",
+    "es-ES": "No se pudo guardar el acuerdo.",
+    "zh-CN": "无法保存协议。"
+  },
+  "Em andamento": {
+    "pt-BR": "Em andamento",
+    "en-US": "In progress",
+    "es-ES": "En curso",
+    "zh-CN": "进行中"
+  },
+  "Registrar acordo de dívida": {
+    "pt-BR": "Registrar acordo de dívida",
+    "en-US": "Register debt agreement",
+    "es-ES": "Registrar acuerdo de deuda",
+    "zh-CN": "登记债务协议"
+  },
+  "Registrar acordo": {
+    "pt-BR": "Registrar acordo",
+    "en-US": "Register agreement",
+    "es-ES": "Registrar acuerdo",
+    "zh-CN": "登记协议"
+  },
+  "Data do acordo": {
+    "pt-BR": "Data do acordo",
+    "en-US": "Agreement date",
+    "es-ES": "Fecha del acuerdo",
+    "zh-CN": "协议日期"
+  },
+  "Total negociado": {
+    "pt-BR": "Total negociado",
+    "en-US": "Agreed total",
+    "es-ES": "Total acordado",
+    "zh-CN": "协商总额"
+  },
+  "Informe o valor total fechado, incluindo entrada, parcelas, juros e tarifas.": {
+    "pt-BR": "Informe o valor total fechado, incluindo entrada, parcelas, juros e tarifas.",
+    "en-US": "Enter the agreed total, including the down payment, installments, interest and fees.",
+    "es-ES": "Introduzca el total acordado, incluyendo la entrada, las cuotas, los intereses y las comisiones.",
+    "zh-CN": "请输入约定总额，包括首付款、分期、利息和费用。"
+  },
+  "Vencimento da entrada": {
+    "pt-BR": "Vencimento da entrada",
+    "en-US": "Down payment due date",
+    "es-ES": "Vencimiento de la entrada",
+    "zh-CN": "首付款到期日"
+  },
+  "Parcelas mensais (sem a entrada)": {
+    "pt-BR": "Parcelas mensais (sem a entrada)",
+    "en-US": "Monthly installments (excluding down payment)",
+    "es-ES": "Cuotas mensuales (sin la entrada)",
+    "zh-CN": "每月分期数（不含首付款）"
+  },
+  "Primeira parcela": {
+    "pt-BR": "Primeira parcela",
+    "en-US": "First installment",
+    "es-ES": "Primera cuota",
+    "zh-CN": "首期付款"
+  },
+  "Para quitação à vista, use uma parcela ou informe o total como entrada e zero parcelas.": {
+    "pt-BR": "Para quitação à vista, use uma parcela ou informe o total como entrada e zero parcelas.",
+    "en-US": "For a lump-sum payment, use one installment or enter the total as the down payment with zero installments.",
+    "es-ES": "Para un pago al contado, use una cuota o introduzca el total como entrada y cero cuotas.",
+    "zh-CN": "一次性结清可设置一期，或将总额设为首付款并将分期数设为零。"
+  },
+  "Observações ou referência do contrato": {
+    "pt-BR": "Observações ou referência do contrato",
+    "en-US": "Notes or contract reference",
+    "es-ES": "Notas o referencia del contrato",
+    "zh-CN": "备注或合同编号"
+  },
+  "A entrada e as parcelas serão adicionadas a Contas a pagar. Registre cada pagamento pelo botão Pagar.": {
+    "pt-BR": "A entrada e as parcelas serão adicionadas a Contas a pagar. Registre cada pagamento pelo botão Pagar.",
+    "en-US": "The down payment and installments will be added to Bills. Record each payment using the Pay button.",
+    "es-ES": "La entrada y las cuotas se añadirán a Cuentas por pagar. Registre cada pago con el botón Pagar.",
+    "zh-CN": "首付款和分期将添加到应付账款。请使用“支付”按钮登记每笔付款。"
+  },
+  "Acréscimo": {
+    "pt-BR": "Acréscimo",
+    "en-US": "Increase",
+    "es-ES": "Incremento",
+    "zh-CN": "增加金额"
+  },
+  "Nenhum acordo registrado para esta dívida.": {
+    "pt-BR": "Nenhum acordo registrado para esta dívida.",
+    "en-US": "No agreement registered for this debt.",
+    "es-ES": "No hay acuerdos registrados para esta deuda.",
+    "zh-CN": "此债务尚未登记协议。"
+  },
+  "Acordos da dívida": {
+    "pt-BR": "Acordos da dívida",
+    "en-US": "Debt agreements",
+    "es-ES": "Acuerdos de la deuda",
+    "zh-CN": "债务协议"
+  },
+  "Saldo anterior": {
+    "pt-BR": "Saldo anterior",
+    "en-US": "Previous balance",
+    "es-ES": "Saldo anterior",
+    "zh-CN": "原余额"
+  },
+  "Restante": {
+    "pt-BR": "Restante",
+    "en-US": "Remaining",
+    "es-ES": "Restante",
+    "zh-CN": "剩余金额"
+  },
+  "Pagamento": {
+    "pt-BR": "Pagamento",
+    "en-US": "Payment",
+    "es-ES": "Pago",
+    "zh-CN": "付款"
+  },
+  "Situação": {
+    "pt-BR": "Situação",
+    "en-US": "Status",
+    "es-ES": "Estado",
+    "zh-CN": "状态"
+  },
+  "Pago em {value}": {
+    "pt-BR": "Pago em {value}",
+    "en-US": "Paid on {value}",
+    "es-ES": "Pagado el {value}",
+    "zh-CN": "已于 {value} 支付"
+  },
+  "Cancelar acordo": {
+    "pt-BR": "Cancelar acordo",
+    "en-US": "Cancel agreement",
+    "es-ES": "Cancelar acuerdo",
+    "zh-CN": "取消协议"
+  },
+  "Para estornar um pagamento, exclua sua despesa em Lançamentos. A parcela será reaberta no acordo e em Contas a pagar.": {
+    "pt-BR": "Para estornar um pagamento, exclua sua despesa em Lançamentos. A parcela será reaberta no acordo e em Contas a pagar.",
+    "en-US": "To reverse a payment, delete its expense under Transactions. The installment will reopen in the agreement and Bills.",
+    "es-ES": "Para revertir un pago, elimine su gasto en Movimientos. La cuota volverá a estar pendiente en el acuerdo y en Cuentas por pagar.",
+    "zh-CN": "要撤销付款，请在“交易”中删除相应支出。分期将在协议和应付账款中恢复为待付款。"
+  },
+  "Cancelar este acordo e restaurar as condições anteriores da dívida? As parcelas pendentes do acordo serão removidas.": {
+    "pt-BR": "Cancelar este acordo e restaurar as condições anteriores da dívida? As parcelas pendentes do acordo serão removidas.",
+    "en-US": "Cancel this agreement and restore the previous debt terms? The agreement’s pending installments will be removed.",
+    "es-ES": "¿Cancelar este acuerdo y restaurar las condiciones anteriores de la deuda? Se eliminarán las cuotas pendientes del acuerdo.",
+    "zh-CN": "取消此协议并恢复原债务条款？协议中待支付的分期将被移除。"
+  },
+  "Parcela de acordo": {
+    "pt-BR": "Parcela de acordo",
+    "en-US": "Agreement installment",
+    "es-ES": "Cuota de acuerdo",
+    "zh-CN": "协议分期"
+  },
+  "Esta parcela já foi paga ou não está mais disponível.": {
+    "pt-BR": "Esta parcela já foi paga ou não está mais disponível.",
+    "en-US": "This installment has already been paid or is no longer available.",
+    "es-ES": "Esta cuota ya se ha pagado o ya no está disponible.",
+    "zh-CN": "此分期已支付或已不可用。"
+  },
+  "Ver acordos": {
+    "pt-BR": "Ver acordos",
+    "en-US": "View agreements",
+    "es-ES": "Ver acuerdos",
+    "zh-CN": "查看协议"
+  },
+  "Dívidas para negociar": {
+    "pt-BR": "Dívidas para negociar",
+    "en-US": "Debts to negotiate",
+    "es-ES": "Deudas para negociar",
+    "zh-CN": "待协商债务"
+  },
+  "Acordos registrados": {
+    "pt-BR": "Acordos registrados",
+    "en-US": "Registered agreements",
+    "es-ES": "Acuerdos registrados",
+    "zh-CN": "已登记协议"
+  },
+  "Nenhuma dívida aguardando acordo": {
+    "pt-BR": "Nenhuma dívida aguardando acordo",
+    "en-US": "No debts awaiting an agreement",
+    "es-ES": "No hay deudas pendientes de acuerdo",
+    "zh-CN": "没有待达成协议的债务"
+  },
+  "Saldo antes do acordo: {value}": {
+    "pt-BR": "Saldo antes do acordo: {value}",
+    "en-US": "Balance before agreement: {value}",
+    "es-ES": "Saldo antes del acuerdo: {value}",
+    "zh-CN": "协议前余额：{value}"
+  },
+  "De {value} a {value}": {
+    "pt-BR": "De {value} a {value}",
+    "en-US": "From {value} to {value}",
+    "es-ES": "De {value} a {value}",
+    "zh-CN": "从 {value} 到 {value}"
+  },
+  "Entrada: {value}": {
+    "pt-BR": "Entrada: {value}",
+    "en-US": "Down payment: {value}",
+    "es-ES": "Entrada: {value}",
+    "zh-CN": "首付款：{value}"
+  },
+  "{value} parcela(s): {value}": {
+    "pt-BR": "{value} parcela(s): {value}",
+    "en-US": "{value} installment(s): {value}",
+    "es-ES": "{value} cuota(s): {value}",
+    "zh-CN": "{value} 期：{value}"
+  },
+  "Último vencimento: {value}": {
+    "pt-BR": "Último vencimento: {value}",
+    "en-US": "Last due date: {value}",
+    "es-ES": "Último vencimiento: {value}",
+    "zh-CN": "最后到期日：{value}"
+  },
+  "Total negociado: {value} · Pago: {value}": {
+    "pt-BR": "Total negociado: {value} · Pago: {value}",
+    "en-US": "Agreed total: {value} · Paid: {value}",
+    "es-ES": "Total acordado: {value} · Pagado: {value}",
+    "zh-CN": "协商总额：{value} · 已付：{value}"
   }
 }

@@ -7,6 +7,7 @@ import type { Bill, BillInterval, BillPriceIncrease, CategorySplit, CategorySpli
 import { categoryOrChildPredicate } from '../categoryHierarchyQueries';
 import { isPixEligibleAccountType } from '../../shared/utils';
 import { asCents, fromCents, reconcileMoneyParts, toExactCents, type Cents } from '../../shared/money';
+import { agreementInstallmentForBill, assertAgreementBillEditable, recordAgreementPayment } from '../debtAgreements';
 
 type BillInput = Omit<Bill, 'id' | 'created_at' | 'updated_at'> & { payments?: PaymentSplit[]; categories?: CategorySplit[] };
 type BillUpdateInput = Partial<Bill> & { id: string; payments?: PaymentSplit[]; categories?: CategorySplit[] };
@@ -167,7 +168,8 @@ function getBillCategories(billId: string): CategorySplitWithCategory[] {
 
 function enrichBill<T extends Bill>(bill: T | undefined | null): (T & { payments: PaymentSplitWithAccount[]; categories: CategorySplitWithCategory[] }) | null {
   if (!bill) return null;
-  return { ...bill, payments: getBillPayments(bill.id), categories: getBillCategories(bill.id) };
+  return { ...bill, debt_agreement_id: agreementInstallmentForBill(getDb(), bill.id)?.agreement_id ?? null,
+    payments: getBillPayments(bill.id), categories: getBillCategories(bill.id) };
 }
 
 function enrichBills<T extends Bill>(bills: T[]): (T & { payments: PaymentSplitWithAccount[]; categories: CategorySplitWithCategory[] })[] {
@@ -256,6 +258,7 @@ function markBillAsPaid({ id, category_id, categories: inputCategories, date, pa
       const categoryCents = toExactCents(category.amount);
       txCategoryStmt.run(randomUUID(), txId, category.category_id, fromCents(categoryCents), categoryCents);
     }
+    recordAgreementPayment(db, id, txId, paidAt);
     db.prepare('DELETE FROM bills WHERE id = ?').run(id);
   })();
 
@@ -348,6 +351,7 @@ export function registerBillHandlers(): void {
   // segundo o intervalo escolhido (semanal, mensal, trimestral, etc).
   // Não mexe na conta original nem usa o mecanismo de recurring=1.
   ipcMain.handle('bills:duplicate', (_e, { id, times, interval }: { id: string; times: number; interval: BillInterval }) => {
+    assertAgreementBillEditable(getDb(), id);
     const db = getDb();
     const bill = db.prepare('SELECT * FROM bills WHERE id = ?').get(id) as Bill | undefined;
     if (!bill) throw new Error('Conta não encontrada.');
@@ -372,6 +376,7 @@ export function registerBillHandlers(): void {
   });
 
   ipcMain.handle('bills:update', (_e, { id, ...data }: BillUpdateInput) => {
+    assertAgreementBillEditable(getDb(), id);
     const current = getDb().prepare('SELECT status FROM bills WHERE id = ?').get(id) as { status: Bill['status'] } | undefined;
     if (!current) throw new Error('Conta não encontrada.');
     if (data.status === 'paid' && current.status !== 'paid') {
@@ -395,6 +400,7 @@ export function registerBillHandlers(): void {
   });
 
   ipcMain.handle('bills:delete', (_e, id: string) => {
+    assertAgreementBillEditable(getDb(), id);
     getDb().prepare('DELETE FROM bills WHERE id = ?').run(id);
   });
 

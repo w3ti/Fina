@@ -1198,7 +1198,21 @@ Use essa ordem como referência para decidir onde colocar pagamentos extras.
 
 ## Renegociação
 
-A tela `Renegociação` ajuda a identificar quais dívidas merecem tentativa de renegociação primeiro.
+A tela `Renegociação` permite registrar e acompanhar acordos fechados, além de identificar quais dívidas ainda merecem tentativa de renegociação.
+
+### Registrar e acompanhar um acordo
+
+Use `Registrar acordo` em `Dívidas` ou `Renegociação`. Informe a data, o total negociado (incluindo entrada, juros e tarifas), a entrada, a quantidade de parcelas mensais sem contar a entrada, os vencimentos e, se desejar, a referência do contrato.
+
+O formulário mostra o desconto ou acréscimo em relação ao saldo anterior e calcula as parcelas com ajuste de centavos. Para quitação à vista, use uma parcela ou o total como entrada e zero parcelas. Vencimentos no dia 31 são ajustados ao último dia dos meses mais curtos.
+
+Ao registrar, o Fina preserva as condições anteriores no histórico, atualiza o saldo da dívida para o total contratado e agenda a entrada e as parcelas em `Contas a pagar`. A taxa de juros da dívida passa a zero porque os encargos já estão incluídos no total negociado. O registro do acordo não representa um pagamento.
+
+Em `Ver acordos`, acompanhe o valor pago, o saldo restante e cada vencimento. Use `Pagar` no acordo ou na Agenda para registrar a despesa e reduzir o saldo devedor. O último pagamento quita a dívida automaticamente.
+
+Para corrigir um pagamento, exclua sua despesa em `Lançamentos`: o Fina estorna o movimento financeiro e reabre a parcela. Valores e vencimentos contratados não podem ser alterados pelas telas genéricas. Um acordo sem pagamentos pode ser cancelado, restaurando as condições anteriores e removendo suas contas pendentes. Acordos cancelados permanecem no histórico; depois do cancelamento é possível registrar outro acordo.
+
+### Prioridades de negociação
 
 Ela usa as dívidas cadastradas para montar uma fila de prioridade, considerando atraso, juros, valor da parcela e saldo devedor.
 

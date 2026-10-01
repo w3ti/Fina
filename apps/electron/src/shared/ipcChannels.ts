@@ -16,6 +16,7 @@ export const INVOKE_CHANNELS = [
   'db:path',
   'debts:compareVsInvest', 'debts:create', 'debts:createBill', 'debts:delete', 'debts:getSummary', 'debts:list',
   'debts:simulate', 'debts:update',
+  'debts:listAgreements', 'debts:createAgreement', 'debts:cancelAgreement',
   'dialog:openDocument',
   'documents:delete', 'documents:import', 'documents:list', 'documents:open',
   'export:csv', 'export:pdf',

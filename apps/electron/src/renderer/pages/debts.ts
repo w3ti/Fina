@@ -5,6 +5,7 @@ import { setTopbarActions } from '../components/topbar';
 import { attachMoneyMask, formatMoneyValue, moneyInputValue } from '../components/moneyMask';
 import { showAlert, showConfirm } from '../components/alertDialog';
 import { aiDraftNotice, openAICreateDraft } from '../components/aiCreateDraft';
+import { openDebtAgreementDetails, openDebtAgreementForm } from '../components/debtAgreementModal';
 import type { AIDebtDraft, Debt, DebtType, DebtStatus, DebtSimulation, DebtVsInvestComparison } from '../../shared/types';
 
 const TYPE_META: Record<DebtType, { label: string; icon: string }> = {
@@ -122,10 +123,14 @@ export async function render(el: HTMLElement): Promise<void> {
                   </td>
                   <td style="text-align:center"><span class="badge ${status.badge}">${status.label}</span></td>
                   <td style="text-align:right;white-space:nowrap">
+                    ${d.agreement_history_count ? `<button class="btn btn-secondary btn-sm btn-agreement-details" data-id="${d.id}">Ver acordos</button>` : ''}
+                    ${!d.agreement_id && d.status !== 'quitada' ? `<button class="btn btn-secondary btn-sm btn-agreement-new" data-id="${d.id}">Registrar acordo</button>` : ''}
+                    ${!d.agreement_id ? `
                     <button class="btn btn-ghost btn-sm btn-sim" data-id="${d.id}" title="Simular quitação"><i class="ti ti-calculator"></i></button>
                     <button class="btn btn-ghost btn-sm btn-bill" data-id="${d.id}" title="Gerar conta a pagar"><i class="ti ti-calendar-plus"></i></button>
                     <button class="btn btn-ghost btn-sm btn-edit-debt" data-id="${d.id}" title="Editar"><i class="ti ti-pencil"></i></button>
-                    <button class="btn btn-ghost btn-sm btn-del-debt" data-id="${d.id}" title="Excluir" style="color:var(--danger)"><i class="ti ti-trash"></i></button>
+                    ` : ''}
+                    ${!d.agreement_history_count ? `<button class="btn btn-ghost btn-sm btn-del-debt" data-id="${d.id}" title="Excluir" style="color:var(--danger)"><i class="ti ti-trash"></i></button>` : ''}
                   </td>
                 </tr>`;
               }).join('')}
@@ -136,6 +141,16 @@ export async function render(el: HTMLElement): Promise<void> {
     `;
 
     el.querySelector('#btn-empty-debt')?.addEventListener('click', () => openModal(null));
+    const refresh = async (): Promise<void> => { await load(); await renderPage(); };
+    el.querySelectorAll<HTMLButtonElement>('.btn-agreement-new').forEach(button => {
+      button.addEventListener('click', () => {
+        const debt = debts.find(item => item.id === button.dataset.id);
+        if (debt) openDebtAgreementForm(debt, refresh);
+      });
+    });
+    el.querySelectorAll<HTMLButtonElement>('.btn-agreement-details').forEach(button => {
+      button.addEventListener('click', () => { void openDebtAgreementDetails(button.dataset.id!, refresh); });
+    });
     el.querySelectorAll<HTMLElement>('.btn-edit-debt').forEach(btn =>
       btn.addEventListener('click', () => openModal(debts.find(d => d.id === btn.dataset.id) ?? null))
     );

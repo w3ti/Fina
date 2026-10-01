@@ -27,6 +27,8 @@ const SIMPLE_TABLES: SimpleTableConfig[] = [
   { table: 'assets', timestampColumn: 'updated_at' },
   { table: 'asset_reminders', timestampColumn: 'updated_at' },
   { table: 'debts', timestampColumn: 'updated_at' },
+  { table: 'debt_agreements', timestampColumn: 'updated_at' },
+  { table: 'debt_agreement_installments', timestampColumn: 'updated_at' },
   { table: 'credit_card_invoices', timestampColumn: 'updated_at' },
   { table: 'mei_das_payments', timestampColumn: 'updated_at' },
   { table: 'family_members', timestampColumn: 'updated_at' },
@@ -534,6 +536,8 @@ export function importIncrementalPatch(filePath: string, password?: string): voi
       if (accountRows?.length) upsertAccountRows(accountRows, patch.generated_at);
 
       for (const cfg of SIMPLE_TABLES) {
+        // As parcelas pagas referenciam lançamentos importados no bloco abaixo.
+        if (cfg.table === 'debt_agreement_installments') continue;
         const rows = cfg.table === 'financial_documents'
           ? documentState.rows
           : patch.tables[cfg.table];
@@ -571,6 +575,9 @@ export function importIncrementalPatch(filePath: string, password?: string): voi
           upsertRows(child, childRows, true, patch.generated_at);
         }
       }
+
+      const agreementInstallments = patch.tables.debt_agreement_installments;
+      if (agreementInstallments?.length) upsertRows('debt_agreement_installments', agreementInstallments, false, patch.generated_at);
 
       for (const [table, rows] of Object.entries(patch.deleted)) {
         deleteRowsFromPatch(table, rows, files);
