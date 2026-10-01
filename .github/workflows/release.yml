@@ -44,11 +44,13 @@ jobs:
       - name: Generate icons
         run: npm run generate-icons
 
-      - name: Rebuild native dependencies
-        run: npx electron-rebuild -f -w better-sqlite3-multiple-ciphers
-
       - name: Test, typecheck and verify i18n coverage
         run: npm test && npm run typecheck
+
+      # Depois dos testes: o rebuild compila o módulo nativo para o ABI do
+      # Electron, que o Node do runner não consegue carregar.
+      - name: Rebuild native dependencies
+        run: npx electron-rebuild -f -w better-sqlite3-multiple-ciphers
 
       - name: Build app
         run: npm run build
@@ -108,11 +110,13 @@ jobs:
       - name: Generate icons
         run: npm run generate-icons
 
-      - name: Rebuild native dependencies
-        run: npx electron-rebuild -f -w better-sqlite3-multiple-ciphers
-
       - name: Test, typecheck and verify i18n coverage
         run: npm test && npm run typecheck
+
+      # Depois dos testes: o rebuild compila o módulo nativo para o ABI do
+      # Electron, que o Node do runner não consegue carregar.
+      - name: Rebuild native dependencies
+        run: npx electron-rebuild -f -w better-sqlite3-multiple-ciphers
 
       - name: Build app
         run: npm run build
