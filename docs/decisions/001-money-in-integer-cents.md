@@ -139,6 +139,8 @@ de compatibilidade. Os gates são cumulativos:
    colunas legadas;
 2. o diagnóstico local de integridade retorna zero divergências nas 33 colunas
    inventariadas após operações normais, restore completo e aplicação de patch;
+   `tests/moneyIntegrity.test.ts` cobre esses cenários com patch `cents-v1` e
+   `decimal-v1`, mas o gate exige também o diagnóstico em bases reais;
 3. patch `cents-v1` é o formato emitido por padrão e a leitura de
    `decimal-v1` permanece coberta como importação legada;
 4. mobile v2 está disponível em produção e o suporte a mobile v1 foi encerrado
