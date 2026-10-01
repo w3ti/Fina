@@ -43,3 +43,11 @@ Este documento define as regras funcionais da hierarquia de categorias do Fina.
 - Gráficos principais apresentam a visão consolidada por pai e permitem detalhamento.
 - CSV mantém a coluna Categoria e acrescenta Subcategoria.
 - PDF usa o caminho `Categoria › Subcategoria`.
+
+## Fina Mobile
+
+- O formulário de lançamento separa os campos Categoria e Subcategoria (opcional).
+- Categoria lista apenas as raízes; Subcategoria lista apenas as filhas da categoria selecionada.
+- Trocar de categoria limpa a subcategoria anterior. A opção "Sem subcategoria" associa o lançamento diretamente à categoria.
+- Ao corrigir um lançamento, os dois campos são preenchidos a partir da categoria ou subcategoria salva.
+- A sincronização mantém um único `category_id`: o da subcategoria, quando escolhida, ou o da categoria principal.

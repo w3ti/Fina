@@ -30,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
@@ -39,8 +40,6 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import br.com.w3ti.fina.mobile.data.AccountEntity
-import br.com.w3ti.fina.mobile.data.CategoryEntity
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
@@ -107,9 +106,10 @@ fun NewTransactionScreen(
     var selectedAccount by remember(editing?.clientId, accounts) {
         mutableStateOf(accounts.firstOrNull { it.id == editing?.accountId })
     }
-    var selectedCategory by remember(editing?.clientId, categories) {
-        mutableStateOf(categories.firstOrNull { it.id == editing?.categoryId })
+    var selectedCategoryId by rememberSaveable(editing?.clientId) {
+        mutableStateOf(editing?.categoryId)
     }
+    val categorySelection = remember(categories, selectedCategoryId) { CategorySelection(categories, selectedCategoryId) }
     var notes by remember(editing?.clientId) { mutableStateOf(editing?.notes.orEmpty()) }
 
     // Arredonda pra centavos no ponto de entrada: evita que erro de ponto
@@ -117,7 +117,7 @@ fun NewTransactionScreen(
     // sync -> Room -> desktop, já que o valor trafega como Double no protocolo.
     val amount = amountDigits.toLongOrNull()?.div(100.0)
     val canSubmit = description.isNotBlank() && amount != null && amount.isFinite() && amount > 0 &&
-        selectedAccount != null && selectedCategory != null
+        selectedAccount != null && categorySelection.transactionCategoryId != null
 
     Scaffold(
         topBar = {
@@ -168,10 +168,22 @@ fun NewTransactionScreen(
 
             EntityDropdown(
                 label = "Categoria",
-                items = categories,
+                items = categorySelection.roots,
                 itemLabel = { it.name },
-                selected = selectedCategory,
-                onSelected = { selectedCategory = it },
+                selected = categorySelection.category,
+                onSelected = { selectedCategoryId = categorySelection.selectCategory(it?.id) },
+                modifier = Modifier.padding(top = 16.dp),
+            )
+
+            EntityDropdown(
+                label = "Subcategoria (opcional)",
+                items = categorySelection.subcategories,
+                itemLabel = { it.name },
+                selected = categorySelection.subcategory,
+                onSelected = { selectedCategoryId = it?.id ?: categorySelection.category?.id },
+                emptyOptionLabel = "Sem subcategoria",
+                enabled = categorySelection.subcategories.isNotEmpty(),
+                placeholder = if (categorySelection.category == null) "Selecione uma categoria" else "Sem subcategoria",
                 modifier = Modifier.padding(top = 16.dp),
             )
 
@@ -195,7 +207,7 @@ fun NewTransactionScreen(
                     viewModel.saveTransaction(
                         clientId = editing?.clientId,
                         accountId = selectedAccount!!.id,
-                        categoryId = selectedCategory!!.id,
+                        categoryId = categorySelection.transactionCategoryId!!,
                         description = description.trim(),
                         amount = amount!!,
                         type = TRANSACTION_TYPE,
@@ -216,20 +228,30 @@ private fun <T> EntityDropdown(
     items: List<T>,
     itemLabel: (T) -> String,
     selected: T?,
-    onSelected: (T) -> Unit,
+    onSelected: (T?) -> Unit,
     modifier: Modifier = Modifier,
+    emptyOptionLabel: String? = null,
+    enabled: Boolean = true,
+    placeholder: String = "",
 ) {
-    var expanded by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }, modifier = modifier) {
+    var expanded by remember(items, enabled) { mutableStateOf(false) }
+    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { if (enabled) expanded = it }, modifier = modifier) {
         OutlinedTextField(
-            value = selected?.let(itemLabel) ?: "",
+            value = selected?.let(itemLabel) ?: placeholder,
             onValueChange = {},
             readOnly = true,
+            enabled = enabled,
             label = { Text(label) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable),
+            modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = enabled),
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            if (emptyOptionLabel != null) {
+                DropdownMenuItem(
+                    text = { Text(emptyOptionLabel) },
+                    onClick = { onSelected(null); expanded = false },
+                )
+            }
             items.forEach { item ->
                 DropdownMenuItem(
                     text = { Text(itemLabel(item)) },
