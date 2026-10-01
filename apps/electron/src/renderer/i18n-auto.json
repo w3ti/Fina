@@ -4241,12 +4241,6 @@
     "es-ES": "Iniciar conexión",
     "zh-CN": "开始连接"
   },
-  "Instalado via AUR — atualize pelo gerenciador de pacotes.": {
-    "pt-BR": "Instalado via AUR — atualize pelo gerenciador de pacotes.",
-    "en-US": "Installed via AUR — update via package manager.",
-    "es-ES": "Instalado a través de AUR: actualización a través del administrador de paquetes.",
-    "zh-CN": "通过 AUR 安装 — 通过包管理器更新。"
-  },
   "Instituição": {
     "pt-BR": "Instituição",
     "en-US": "Institution",

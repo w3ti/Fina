@@ -2,7 +2,7 @@ import { autoUpdater } from 'electron-updater';
 import { ipcMain, app, type BrowserWindow } from 'electron';
 import { UpdaterWindowState } from './updaterWindowState';
 
-// No Linux o Fina é distribuído como .deb/.rpm/AUR, que o electron-updater não
+// No Linux o Fina é distribuído como .deb/.rpm, que o electron-updater não
 // sabe baixar nem instalar sozinho — esses usuários seguem usando a checagem
 // manual via GitHub (ver ipcMain.handle('app:checkUpdate', ...) em index.ts).
 const SUPPORTED = process.platform === 'win32';

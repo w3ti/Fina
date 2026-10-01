@@ -885,7 +885,6 @@ type UpdateInfo = {
   currentVersion: string;
   latestVersion: string;
   hasUpdate: boolean;
-  isAur: boolean;
   releaseUrl: string;
   checkFailed?: boolean;
 };
@@ -1031,13 +1030,6 @@ function renderManualUpdateBox(el: HTMLElement): void {
       sub.textContent = 'Não foi possível verificar. Verifique sua conexão.';
       btn.textContent = 'Tentar novamente';
       btn.disabled = false;
-      return;
-    }
-
-    if (info.isAur) {
-      sub.textContent = 'Instalado via AUR — atualize pelo gerenciador de pacotes.';
-      btn.textContent = 'Atualizar via AUR';
-      btn.disabled = true;
       return;
     }
 

@@ -241,7 +241,6 @@ function registerHandlers(): void {
 
   ipcMain.handle('app:checkUpdate', () => new Promise<object>((resolve) => {
     const currentVersion = app.getVersion();
-    const isAur = app.getAppPath().startsWith('/usr/');
     const options = {
       hostname: 'api.github.com',
       path: '/repos/britors/Fina/releases?per_page=30',
@@ -258,16 +257,16 @@ function registerHandlers(): void {
           if (!release) throw new Error('desktop-release-not-found');
           const latestVersion = release?.tag_name.slice(1) ?? '';
           const hasUpdate = isNewerDesktopVersion(latestVersion, currentVersion);
-          resolve({ currentVersion, latestVersion, hasUpdate, isAur, releaseUrl: release?.html_url ?? '' });
+          resolve({ currentVersion, latestVersion, hasUpdate, releaseUrl: release?.html_url ?? '' });
         } catch {
-          resolve({ currentVersion, latestVersion: '', hasUpdate: false, isAur, releaseUrl: '', checkFailed: true });
+          resolve({ currentVersion, latestVersion: '', hasUpdate: false, releaseUrl: '', checkFailed: true });
         }
       });
     });
-    req.on('error', () => resolve({ currentVersion, latestVersion: '', hasUpdate: false, isAur, releaseUrl: '', checkFailed: true }));
+    req.on('error', () => resolve({ currentVersion, latestVersion: '', hasUpdate: false, releaseUrl: '', checkFailed: true }));
     req.setTimeout(5000, () => {
       req.destroy();
-      resolve({ currentVersion, latestVersion: '', hasUpdate: false, isAur, releaseUrl: '', checkFailed: true });
+      resolve({ currentVersion, latestVersion: '', hasUpdate: false, releaseUrl: '', checkFailed: true });
     });
   }));
 

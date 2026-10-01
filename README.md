@@ -90,16 +90,6 @@ O Fina foi criado para ajudar pessoas a enxergarem sua situação financeira, pl
 
 ## Instalação
 
-### Linux — Arch / Manjaro (AUR)
-
-```bash
-# Com yay
-yay -S fina
-
-# Com paru
-paru -S fina
-```
-
 ### Linux — openSUSE Tumbleweed e Leap 16.0/16.1 (OBS)
 
 O Fina está publicado no [openSUSE Build Service (OBS)](https://build.opensuse.org/project/show/home:rodrigosbrito:fina), no projeto
@@ -170,12 +160,6 @@ Compatível com Windows 10/11 (x64).
 
 ## Desinstalação
 
-### Linux — Arch / Manjaro (AUR)
-
-```bash
-sudo pacman -Rns fina
-```
-
 ### Linux — openSUSE Leap, Fedora e Ubuntu/Debian
 
 O script `scripts/uninstall.sh` é a contraparte do instalador: detecta a
@@ -216,7 +200,6 @@ Acesse: **[github.com/britors/Fina/releases](https://github.com/britors/Fina/rel
 
 | Plataforma | Arquivo | Gerado via |
 | --- | --- | --- |
-| Arch Linux | AUR (`fina`) | PKGBUILD — build from source |
 | Debian / Ubuntu | `.deb` | GitHub Actions → electron-builder |
 | openSUSE Tumbleweed / Leap 16.0/16.1 | `fina` | OBS (`home:rodrigosbrito:fina`) |
 | Fedora | `.rpm` | GitHub Actions → electron-builder |

@@ -36,7 +36,7 @@ async function main() {
   }
   console.log(`✓ build/icons/{${HICOLOR_SIZES.join(',')}}x*.png`);
 
-  // 512×512 PNG solto — fallback em /usr/share/pixmaps (AUR PKGBUILD)
+  // 512×512 PNG solto — fallback em /usr/share/pixmaps
   fs.writeFileSync(path.join(__dirname, 'icon.png'), renderPng(svg, 512));
   console.log('✓ build/icon.png (512x512)');
 

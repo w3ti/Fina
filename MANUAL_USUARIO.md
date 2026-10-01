@@ -1530,7 +1530,7 @@ Mostra:
 
 Também permite `Verificar atualizações`.
 
-Se houver uma nova versão disponível, o botão muda para baixar a atualização. Se o Fina foi instalado via AUR, a atualização deve ser feita pelo gerenciador de pacotes do sistema.
+Se houver uma nova versão disponível, o botão muda para baixar a atualização.
 
 ## Recomendações de uso
 

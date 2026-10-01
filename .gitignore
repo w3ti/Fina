@@ -9,13 +9,6 @@ apps/electron/build/icon.png
 apps/electron/build/icon.ico
 apps/electron/build/icons/
 
-# AUR — arquivos gerados pelo makepkg
-aur/.SRCINFO
-aur/*.tar.gz
-aur/*.tar.zst
-aur/pkg/
-aur/src/
-
 # Banco de dados local
 *.db
 *.db-shm
